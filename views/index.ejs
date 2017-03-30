@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Mapa Contaminacion</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="Description" content="" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Rubik+Mono+One" rel="stylesheet">
+    <script type="text/javascript" src="js/map.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Indice de Calidad del Aire</h1></header>
+
+    <section id="mapsection">
+      <div id="map" style="width: 100%; height: 100%; position:absolute; top: 90px;left: 0;"></div>
+    </section>
+    <script type="text/javascript">
+    window.initMap = function() {
+            var mapOptions = {
+                zoom: 6,
+                zoomControl: true,
+                zoomControlOptions: {
+                    position: google.maps.ControlPosition.LEFT_CENTER
+                },
+                center: {
+                    lat: 39.3781,
+                    lng: -3.6795366
+                },
+                disableDefaultUI: true,
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                    mapTypeIds: [ google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.TERRAIN ]
+                }
+            }
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            var icon0  = {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  fillColor: 'grey',
+                      scale: 5,
+                      fillOpacity: 0.8,
+                      strokeColor: 'grey',
+                      strokeWeight: 10
+                };
+
+            var icongreen  = { path: google.maps.SymbolPath.CIRCLE,
+                          scale: 7,
+                          strokeColor: 'green',
+                          strokeWeight: 14
+                        };
+            var iconred  = { path: google.maps.SymbolPath.CIRCLE,
+                            scale: 7,
+                            strokeColor: 'red',
+                            strokeWeight: 14
+                          };
+            var iconyellow  = {  path: google.maps.SymbolPath.CIRCLE,
+                                scale: 7,
+                                strokeColor: 'yellow',
+                                strokeWeight: 14
+                           };
+            var iconorange  = { path: google.maps.SymbolPath.CIRCLE,
+                                scale: 7,
+                                strokeColor: 'orange',
+                                strokeWeight: 14
+                            };
+          map.setOptions({styles: styles});
+          setMarkers(map);
+
+          function setMarkers(map) {
+              <% spains.forEach(function(spain) { %>
+                  var myLatLng = {lat: <%= spain.lat %>, lng: <%= spain.lon %>};
+                  var marker<%= spain.id %> = new google.maps.Marker({
+                      map: map,
+                        <% if (spain.aqi == '0') { %>icon: icon0,
+                        <% } else if(parseInt(spain.aqi) <= 50) { %>icon: icongreen,
+                        <% } else if(parseInt(spain.aqi) <= 100) { %>icon: iconyellow,
+                        <% } else if(parseInt(spain.aqi) <= 150) { %>icon: iconorange,
+                        <% } else { %>   icon: iconred,
+                          <% } %>
+                      draggable: true,
+                      position: myLatLng,
+                      label: '<%= spain.aqi %>'
+                    });
+                    boxText = document.createElement("html");
+                    boxText.innerHTML = '<div id="info">'+
+                      '<h2><strong><%= spain.city_name %></strong></h2>'+
+                      '<h3><%= spain.attr_name %></h3>'+
+                      '<p><a target="_blank" href="<%= spain.attr_url %>"><%= spain.attr_url %></a></p>'+
+                      '<p><%= spain.date %></p>'+
+                      '<p><label>Aqi: </label><span class="aqi"><%= spain.aqi %></a></p>'+
+                      '<p><table><tr><td class="pm">pm10</td><td><%= spain.pm10 %></td> </tr>'+
+                      '<tr><td class="pm">o3</td><td><%= spain.o3 %></td></tr>'+
+                      '<tr><td class="pm">no2</td><td><%= spain.no2 %></td></tr>'+
+                      '<tr><td class="pm">so2</td><td><%= spain.so2 %></td></tr>'+
+                      '<tr><td class="pm">t</td><td><%= spain.t %></td></tr>'+
+                      '<tr><td class="pm">p</td><td><%= spain.p %></td></tr>'+
+                      '<tr><td class="pm">h</td><td><%= spain.h %></td></tr>'+
+                      '</tr></table></div>';
+
+                    var infowindow<%= spain.id %> = new google.maps.InfoWindow({ content: boxText });
+                    marker<%= spain.id %>.addListener('click', function() {
+                        infowindow<%= spain.id %>.open(map, marker<%= spain.id %>);
+                      });
+
+              <% }); %>
+              }
+            }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsep3bl674WDUjos56zB9qJVMEYoRqbf0&callback=initMap&language=es_ES&region=es" type="text/javascript"></script>
+
+</body>
+</html>

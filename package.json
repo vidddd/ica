@@ -1,0 +1,19 @@
+{
+  "name": "ica",
+  "description": "Indice de Calidad del Aire",
+  "version": "0.1.0",
+  "email": "david.alvarez@tbwa.com",
+  "url": "http://tbwa.es/",
+  "devDependencies": {
+    "express": "*"
+  },
+  "dependencies": {
+    "ejs": "*",
+    "ejs-locals": "^1.0.2",
+    "googlemaps": "^1.12.0",
+    "mysql": "^2.13.0",
+    "request": "^2.81.0",
+    "socket.io": "*",
+    "system-sleep": "^1.3.0"
+  }
+}

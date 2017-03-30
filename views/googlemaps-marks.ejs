@@ -1,0 +1,30 @@
+function setMarkers(map) {
+/*
+           var image = {
+               //url: $('#base_url').val()+'images/marker.png',
+               size: new google.maps.Size(ancho, ancho),
+               origin: new google.maps.Point(0,0),
+               anchor: new google.maps.Point((ancho/2), (ancho/2)),
+               scaledSize: new google.maps.Size(ancho, ancho)
+           };*/
+
+
+           var myLatLng = {lat: lats[index], lng: lngs[index]};
+           var marker = new google.maps.Marker({
+               map: map,
+               position: myLatLng,
+               icon: image,
+               label: total[index]
+           });
+
+           google.maps.event.addListener(marker, 'click', function() {
+               // if (infowindow) {
+               //     infowindow.close();
+               // }
+               // infowindow.open(marker.get('map'), marker);
+           });
+
+
+
+
+}
